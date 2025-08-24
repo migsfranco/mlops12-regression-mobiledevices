@@ -21,7 +21,7 @@ def prediccion_o_inferencia(pipeline_de_test, datos_de_test):
     #Dropeamos
     datos_de_test.drop('Id', axis=1, inplace=True)
     # Cast MSSubClass as object
-    datos_de_test['MSSubClass'] = datos_de_test['MSSubClass'].astype('O')
+    datos_de_test['battery_time'] = datos_de_test['battery_time'].astype('O')
     datos_de_test = datos_de_test[config.FEATURES] #Aquí estoy aplicando mi SELECTED FEATURES
 
     new_vars_with_na = [
@@ -41,7 +41,7 @@ def prediccion_o_inferencia(pipeline_de_test, datos_de_test):
 
 
 #Diseno de la Interface
-st.title("Proyecto Modelo ML - Nombre Apellido - DATAPATH")
+st.title("Proyecto Modelo ML - Miguel Franco Bayas - DATAPATH")
 
 image = Image.open('src/images/datapath-logo.png') #src/
 st.image(image, use_container_width=True) #use_column_width esta "deprecated"
@@ -61,7 +61,7 @@ if uploaded_file is not None:
     st.dataframe(df_de_los_datos_subidos)
 #-------------------------------------------------------------------------------------------
 #Cargar el Modelo ML o Cargar el Pipeline
-pipeline_de_produccion = joblib.load('precio_casas_pipeline.joblib') #src/
+pipeline_de_produccion = joblib.load('src/linear_regression.joblib') #src/
 
 if st.sidebar.button("click aqui para enviar el CSV al Pipeline"):
     if uploaded_file is None:
@@ -81,7 +81,7 @@ if st.sidebar.button("click aqui para enviar el CSV al Pipeline"):
             #Graficar los precios de venta predichos
             fig, ax = plt.subplots()
             pd.Series(np.exp(prediccion)).hist(bins=50, ax=ax)
-            ax.set_title('Histograma de los precios de venta predichos')
+            ax.set_title('Histograma de rango de precios de moviles')
             ax.set_xlabel('Precio')
             ax.set_ylabel('Frecuencia')
 
