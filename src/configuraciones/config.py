@@ -1,98 +1,101 @@
-# categorical variables with NA in train set
-#CATEGORICAL_VARS_WITH_NA_FREQUENT = ['']
+categorical variables with NA in train set
+CATEGORICAL_VARS_WITH_NA_FREQUENT = ['']
 
 
-#CATEGORICAL_VARS_WITH_NA_MISSING = ['FireplaceQu']
+CATEGORICAL_VARS_WITH_NA_MISSING = ['battery_time']
 
 
-# numerical variables with NA in train set
-#NUMERICAL_VARS_WITH_NA = ['LotFrontage']
+numerical variables with NA in train set
+NUMERICAL_VARS_WITH_NA = []
 
 
-#TEMPORAL_VARS = ['YearRemodAdd']
-##REF_VAR = "YrSold"
+TEMPORAL_VARS = ['weight', 'ram']
+REF_VAR = "price_range"
 
-# this variable is to calculate the temporal variable,
-# can be dropped afterwards
-#DROP_FEATURES = ["YrSold"]
+this variable is to calculate the temporal variable,
+can be dropped afterwards
+DROP_FEATURES = ['weight', 'ram']
 
-# variables to log transform
-####NUMERICALS_LOG_VARS = ["LotFrontage", "1stFlrSF", "GrLivArea"]
+variables to log transform
+NUMERICALS_LOG_VARS = ['blue',
+ 'clock_speed',
+ 'dual_sim',
+ 'fc',
+ 'four_g',
+ 'int_memory',
+ 'm_dep',
+ 'mobile_wt',
+ 'n_cores',
+ 'pc',
+ 'px_height',
+ 'px_width',
+ 'ram',
+ 'sc_h',
+ 'sc_w',
+ 'talk_time',
+ 'three_g',
+ 'touch_screen',
+ 'wifi']
+
+variables to binarize
+BINARIZE_VARS = ['battery_power', 'clock_speed', 'fc', 'int_memory',
+    'px_height', 'sc_h', 'sc_wh']
+
+variables to map
+QUAL_VARS = ['battery_power', 'clock_speed', 'fc', 'int_memory',
+    'px_height', 'sc_h', 'sc_w']
+
+EXPOSURE_VARS = ['touch_screen']
+
+FINISH_VARS = ['wifi']
+
+GARAGE_VARS = ['four_g', 'three_g', 'dual_sim']
+
+FENCE_VARS = ['mobile_wt', 'talk_time']
 
 
-# variables to binarize
-###BINARIZE_VARS = ['ScreenPorch']
-
-# variables to map
-##QUAL_VARS = ['ExterQual', 'BsmtQual',
-             'HeatingQC', 'KitchenQual', 'FireplaceQu']
-
-#EXPOSURE_VARS = ['BsmtExposure']
-
-#FINISH_VARS = ['BsmtFinType1']
-
-#GARAGE_VARS = ['GarageFinish']
-
-#FENCE_VARS = ['Fence']
+categorical variables to encode
+CATEGORICAL_VARS = ['blue', 'four_g', 'three_g', 'dual_sim', 'touch_screen', 'wifi',
+    'battery_power', 'int_memory', 'mobile_wt', 'ram', 'talk_time',
+    'px_height', 'px_width', 'sc_h', 'sc_w', 'n_cores', 'm_dep']
 
 
-# categorical variables to encode
-#CATEGORICAL_VARS = ['MSSubClass',  'MSZoning',  'LotShape',  'LandContour',
-                    #'LotConfig', 'Neighborhood', 'RoofStyle', 'Exterior1st',
-                    #'Foundation', 'CentralAir', 'Functional', 'PavedDrive',
-                    #'SaleCondition']#
+variable mappings
+QUAL_MAPPINGS = {'Low': 1, 'Med': 2, 'High': 3, 'Very High': 4}
 
+EXPOSURE_MAPPINGS = {'No': 1, 'Mn': 2, 'Av': 3, 'Gd': 4}
 
-# variable mappings
-#QUAL_MAPPINGS = {'Po': 1, 'Fa': 2, 'TA': 3,
-                 #'Gd': 4, 'Ex': 5, 'Missing': 0, 'NA': 0}
-
-#EXPOSURE_MAPPINGS = {'No': 1, 'Mn': 2, 'Av': 3, 'Gd': 4}
-
-#FINISH_MAPPINGS = {'Missing': 0, 'NA': 0, 'Unf': 1,
+FINISH_MAPPINGS = {'Missing': 0, 'NA': 0, 'Unf': 1,
                    'LwQ': 2, 'Rec': 3, 'BLQ': 4, 'ALQ': 5, 'GLQ': 6}
 
-#GARAGE_MAPPINGS = {'Missing': 0, 'NA': 0, 'Unf': 1, 'RFn': 2, 'Fin': 3}
+GARAGE_MAPPINGS = {'Missing': 0, 'NA': 0, 'Unf': 1, 'RFn': 2, 'Fin': 3}
 
 
-# the selected variables
-#FEATURES = [
-    ##'MSSubClass',
-    #'MSZoning',
-    ##'LotFrontage',
-    #'LotShape',
-    #'LandContour',
-    #'LotConfig',
-    #'Neighborhood',
-    #'OverallQual',
-    #'OverallCond',
-    #'YearRemodAdd',
-    #'RoofStyle',
-    #'Exterior1st',
-    #'ExterQual',
-    #'Foundation',
-    #'BsmtQual',
-    #'BsmtExposure',
-    #'BsmtFinType1',
-    #'HeatingQC',
-    #'CentralAir',
-    #'1stFlrSF',
-    #'2ndFlrSF',
-    #'GrLivArea',
-    #'BsmtFullBath',
-    #'HalfBath',
-    #'KitchenQual',
-    #'TotRmsAbvGrd',
-    #'Functional',
-    #'Fireplaces',
-    #'FireplaceQu',
-    #'GarageFinish',
-    #'GarageCars',
-    #'GarageArea',
-    #'PavedDrive',
-    #'WoodDeckSF',
-    #'ScreenPorch',
-    #'SaleCondition',
-    # this one is only to calculate temporal variable:
-    #"YrSold",
-#]
+the selected variables
+FEATURES = [
+    'battery_power',
+    'blue',
+    'clock_speed',
+    'dual_sim',
+    'fc',
+    'four_g',
+    'int_memory',
+    'm_dep',
+    'mobile_wt',
+    'n_cores',
+    'pc',
+    'px_height',
+    'px_width',
+    'ram',
+    'sc_h',
+    'sc_w',
+    'talk_time',
+    'three_g',
+    'touch_screen',
+    'wifi',
+    'weight',
+    'battery_time',
+
+this one is only to calculate temporal variable:
+    "price_range",
+]
