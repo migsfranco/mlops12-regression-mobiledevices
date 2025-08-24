@@ -10,14 +10,11 @@ COPY ./requirements.txt ./
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar la carpeta de imágenes
-COPY ./images ./images
-
 # Set PYTHONPATH to include the src directory
 ENV PYTHONPATH=/usr/src/app/src
 
 # copy src code
-COPY ./ ./src
+COPY ./src ./src
 
 EXPOSE 8080
 

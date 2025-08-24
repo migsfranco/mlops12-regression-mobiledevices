@@ -43,7 +43,7 @@ def prediccion_o_inferencia(pipeline_de_test, datos_de_test):
 #Diseno de la Interface
 st.title("Proyecto Modelo ML - Nombre Apellido - DATAPATH")
 
-image = Image.open('images/datapath-logo.png') #src/
+image = Image.open('src/images/datapath-logo.png') #src/
 st.image(image, use_container_width=True) #use_column_width esta "deprecated"
 
 st.sidebar.write("Suba el archivo CSV correspondiente para realizar la predicción")
