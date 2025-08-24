@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 ENV PYTHONPATH=/usr/src/app/src
 
 # copy src code
-COPY ./src ./src
+COPY ./images ./images
 
 EXPOSE 8080
 
