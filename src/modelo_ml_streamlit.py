@@ -92,7 +92,7 @@ if uploaded_file is not None:
 
 #-------------------------------------------------------------------------------------------
 # Cargar el Modelo ML o Cargar el Pipeline
-pipeline_path = os.path.join(os.path.dirname(__file__), 'linear_regression.joblib')
+pipeline_path = os.path.join(os.path.dirname(__file__), 'input/modelo_entrenado_diamond_price_predictor.pkl')
 
 # Verificar si el modelo existe
 if os.path.exists(pipeline_path):
