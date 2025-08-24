@@ -17,16 +17,24 @@ from configuraciones import config
 #------------------------------------------------------------------------------------------------
 def prediccion_o_inferencia(pipeline_de_test, datos_de_test):
     try:
-        missing_columns = [col for col in config.FEATURES if col not in datos_de_test.columns]
-        if missing_columns:
-            st.error(f"Las siguientes columnas están faltando en el archivo CSV: {missing_columns}")
+        # Obtener las columnas disponibles en el DataFrame
+        available_columns = datos_de_test.columns.tolist()
+
+        # Filtrar las columnas esperadas que están disponibles en el DataFrame
+        features_available = [col for col in config.FEATURES if col in available_columns]
+
+        if not features_available:
+            st.error("No hay columnas coincidentes entre el archivo CSV y las columnas esperadas.")
             return None, None, None
 
-        datos_de_test['battery_time'] = datos_de_test['battery_time'].astype('O')
-        datos_de_test = datos_de_test[config.FEATURES]
+        datos_de_test = datos_de_test[features_available]
+
+        # Verificar si 'battery_time' está en las columnas disponibles
+        if 'battery_time' in datos_de_test.columns:
+            datos_de_test['battery_time'] = datos_de_test['battery_time'].astype('O')
 
         new_vars_with_na = [
-            var for var in config.FEATURES
+            var for var in features_available
             if var not in config.CATEGORICAL_VARS_WITH_NA_FREQUENT +
             config.CATEGORICAL_VARS_WITH_NA_MISSING +
             config.NUMERICAL_VARS_WITH_NA
@@ -34,6 +42,12 @@ def prediccion_o_inferencia(pipeline_de_test, datos_de_test):
         ]
 
         datos_de_test.dropna(subset=new_vars_with_na, inplace=True)
+
+        # Verificar si el DataFrame no está vacío después de eliminar filas con NaN
+        if datos_de_test.empty:
+            st.error("El DataFrame está vacío después de eliminar filas con valores NaN.")
+            return None, None, None
+
         predicciones = pipeline_de_test.predict(datos_de_test)
         predicciones_sin_escalar = np.exp(predicciones)
         return predicciones, predicciones_sin_escalar, datos_de_test
@@ -66,10 +80,11 @@ if uploaded_file is not None:
         st.write('Contenido del archivo CSV en formato Dataframe:')
         st.dataframe(df_de_los_datos_subidos)
 
-        # Validar columnas
-        missing_columns = [col for col in config.FEATURES if col not in df_de_los_datos_subidos.columns]
+        # Validar columnas disponibles
+        available_columns = df_de_los_datos_subidos.columns.tolist()
+        missing_columns = [col for col in config.FEATURES if col not in available_columns]
         if missing_columns:
-            st.error(f"Las siguientes columnas están faltando en el archivo CSV: {missing_columns}")
+            st.warning(f"Las siguientes columnas no están en el archivo CSV y serán ignoradas: {missing_columns}")
         else:
             st.write('Todas las columnas necesarias están presentes.')
     except Exception as e:
