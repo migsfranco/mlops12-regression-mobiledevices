@@ -25,6 +25,15 @@ def add_missing_columns(df, expected_columns):
             df[column] = np.nan
     return df
 
+def impute_missing_values(df):
+    """Imputa valores faltantes en el DataFrame."""
+    for column in df.columns:
+        if df[column].dtype == 'object':
+            df[column].fillna('Unknown', inplace=True)
+        else:
+            df[column].fillna(df[column].median(), inplace=True)
+    return df
+
 def prediccion_o_inferencia(pipeline_de_test, datos_de_test):
     try:
         # Añadir columnas faltantes
@@ -33,24 +42,12 @@ def prediccion_o_inferencia(pipeline_de_test, datos_de_test):
         # Asegurarse de que las columnas estén en el mismo orden que en el entrenamiento
         datos_de_test = datos_de_test[config.FEATURES]
 
+        # Imputar valores faltantes
+        datos_de_test = impute_missing_values(datos_de_test)
+
         # Verificar si 'battery_time' está en las columnas disponibles
         if 'battery_time' in datos_de_test.columns:
             datos_de_test['battery_time'] = datos_de_test['battery_time'].astype('O')
-
-        new_vars_with_na = [
-            var for var in config.FEATURES
-            if var not in config.CATEGORICAL_VARS_WITH_NA_FREQUENT +
-            config.CATEGORICAL_VARS_WITH_NA_MISSING +
-            config.NUMERICAL_VARS_WITH_NA
-            and datos_de_test[var].isnull().sum() > 0
-        ]
-
-        datos_de_test.dropna(subset=new_vars_with_na, inplace=True)
-
-        # Verificar si el DataFrame no está vacío después de eliminar filas con NaN
-        if datos_de_test.empty:
-            st.error("El DataFrame está vacío después de eliminar filas con valores NaN.")
-            return None, None, None
 
         predicciones = pipeline_de_test.predict(datos_de_test)
         predicciones_sin_escalar = np.exp(predicciones)
@@ -88,7 +85,7 @@ if uploaded_file is not None:
         available_columns = df_de_los_datos_subidos.columns.tolist()
         missing_columns = [col for col in config.FEATURES if col not in available_columns]
         if missing_columns:
-            st.warning(f"Las siguientes columnas no están en el archivo CSV y se añadirán con valores NaN: {missing_columns}")
+            st.warning(f"Las siguientes columnas no están en el archivo CSV y se añadirán con valores predeterminados: {missing_columns}")
             df_de_los_datos_subidos = add_missing_columns(df_de_los_datos_subidos, config.FEATURES)
         else:
             st.write('Todas las columnas necesarias están presentes.')
@@ -156,4 +153,5 @@ if st.sidebar.button("Haz clic aquí para enviar el CSV al Pipeline"):
                     file_name='predicciones_modelo_ml.csv',
                     mime='text/csv',
                 )
-#------------------------------------------------------------------------------------------------
+            else:
+                st.error("No se pudieron generar predicciones. Verifica los datos de entrada.")
