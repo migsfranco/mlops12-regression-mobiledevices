@@ -17,7 +17,7 @@ from configuraciones import config  # Asegúrate de que este módulo esté dispo
 
 def prediccion_o_inferencia(pipeline_de_test, datos_de_test):
     try:
-        datos_de_test['battery_time'] = datos_de_test['battery_time'].astype('O')
+        datos_de_test['price_range'] = datos_de_test['price_range'].astype('O')
         datos_de_test = datos_de_test[config.FEATURES]
 
         new_vars_with_na = [
