@@ -1,19 +1,19 @@
 # Categorical variables with NA in train set
 CATEGORICAL_VARS_WITH_NA_FREQUENT = ['']
 
-CATEGORICAL_VARS_WITH_NA_MISSING = ['battery_time']
+CATEGORICAL_VARS_WITH_NA_MISSING = ['battery_power']
 
 # Numerical variables with NA in train set
 NUMERICAL_VARS_WITH_NA = []
 
 # Temporal variables
-TEMPORAL_VARS = ['weight', 'ram']
+TEMPORAL_VARS = ['px_width', 'ram']
 
 # Reference variable
 REF_VAR = "price_range"
 
 # This variable is to calculate the temporal variable, can be dropped afterwards
-DROP_FEATURES = ['weight', 'ram']
+DROP_FEATURES = ['px_width', 'ram']
 
 # Variables to log transform
 NUMERICALS_LOG_VARS = [
@@ -122,5 +122,5 @@ FEATURES = [
     'touch_screen',
     'wifi',
     'weight',
-    'battery_time'
+    'battery_power'
 ]
