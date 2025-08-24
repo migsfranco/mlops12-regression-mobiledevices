@@ -25,6 +25,11 @@ def add_missing_columns(df, expected_columns):
             df[column] = np.nan
     return df
 
+def remove_duplicate_columns(df):
+    """Elimina columnas duplicadas en el DataFrame."""
+    df = df.loc[:, ~df.columns.duplicated()]
+    return df
+
 def impute_missing_values(df):
     """Imputa valores faltantes en el DataFrame."""
     for column in df.columns:
@@ -39,6 +44,9 @@ def prediccion_o_inferencia(pipeline_de_test, datos_de_test):
         # Añadir columnas faltantes
         datos_de_test = add_missing_columns(datos_de_test, config.FEATURES)
 
+        # Eliminar columnas duplicadas
+        datos_de_test = remove_duplicate_columns(datos_de_test)
+
         # Asegurarse de que las columnas estén en el mismo orden que en el entrenamiento
         datos_de_test = datos_de_test[config.FEATURES]
 
@@ -46,8 +54,8 @@ def prediccion_o_inferencia(pipeline_de_test, datos_de_test):
         datos_de_test = impute_missing_values(datos_de_test)
 
         # Verificar si 'battery_time' está en las columnas disponibles
-        if 'battery_time' in datos_de_test.columns:
-            datos_de_test['battery_time'] = datos_de_test['battery_time'].astype('O')
+        if 'battery_power' in datos_de_test.columns:
+            datos_de_test['battery_power'] = datos_de_test['battery_power'].astype('O')
 
         predicciones = pipeline_de_test.predict(datos_de_test)
         predicciones_sin_escalar = np.exp(predicciones)
@@ -80,6 +88,9 @@ if uploaded_file is not None:
         df_de_los_datos_subidos = pd.read_csv(uploaded_file)
         st.write('Contenido del archivo CSV en formato Dataframe:')
         st.dataframe(df_de_los_datos_subidos)
+
+        # Eliminar columnas duplicadas
+        df_de_los_datos_subidos = remove_duplicate_columns(df_de_los_datos_subidos)
 
         # Validar columnas disponibles
         available_columns = df_de_los_datos_subidos.columns.tolist()
@@ -141,17 +152,4 @@ if st.sidebar.button("Haz clic aquí para enviar el CSV al Pipeline"):
 
                 # Mostrar el Dataframe concatenado
                 st.subheader('Dataframe con las Predicciones')
-                st.dataframe(df_resultado)
-
-                # Crear el archivo CSV para descargar
-                csv = df_resultado.to_csv(index=False).encode('utf-8')
-
-                # Botón para descargar el CSV
-                st.download_button(
-                    label="Descargar archivo CSV con las Predicciones",
-                    data=csv,
-                    file_name='predicciones_modelo_ml.csv',
-                    mime='text/csv',
-                )
-            else:
-                st.error("No se pudieron generar predicciones. Verifica los datos de entrada.")
+                st.dataframe
