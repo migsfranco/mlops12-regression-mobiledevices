@@ -6,18 +6,23 @@ import joblib
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+
 #------------------------------------------------------------------------------------------------
 from feature_engine.imputation import CategoricalImputer, MeanMedianImputer, AddMissingIndicator
 from feature_engine.encoding import OrdinalEncoder, RareLabelEncoder
 from sklearn.preprocessing import MinMaxScaler, Binarizer
 from sklearn.pipeline import Pipeline
-# import input.preprocessors as pp  # Asegúrate de que este módulo esté disponible
-from configuraciones import config  # Asegúrate de que este módulo esté disponible
-#------------------------------------------------------------------------------------------------
+from configuraciones import config
 
+#------------------------------------------------------------------------------------------------
 def prediccion_o_inferencia(pipeline_de_test, datos_de_test):
     try:
-        datos_de_test['price_range'] = datos_de_test['price_range'].astype('O')
+        missing_columns = [col for col in config.FEATURES if col not in datos_de_test.columns]
+        if missing_columns:
+            st.error(f"Las siguientes columnas están faltando en el archivo CSV: {missing_columns}")
+            return None, None, None
+
+        datos_de_test['battery_time'] = datos_de_test['battery_time'].astype('O')
         datos_de_test = datos_de_test[config.FEATURES]
 
         new_vars_with_na = [
@@ -36,11 +41,18 @@ def prediccion_o_inferencia(pipeline_de_test, datos_de_test):
         st.error(f"Error durante la predicción: {e}")
         return None, None, None
 
-#Diseno de la Interface
+# Diseño de la Interfaz
 st.title("Proyecto Modelo ML - Miguel Franco Bayas - DATAPATH")
 
-image = Image.open('src/images/datapath-logo.png') #src/
-st.image(image, use_container_width=True) #use_column_width esta "deprecated"
+# Ruta de la imagen
+image_path = os.path.join(os.path.dirname(__file__), 'images/datapath-logo.png')
+
+# Verificar si la imagen existe
+if os.path.exists(image_path):
+    image = Image.open(image_path)
+    st.image(image, use_column_width=True)
+else:
+    st.error(f"No se encontró la imagen en la ruta: {image_path}")
 
 st.sidebar.write("Suba el archivo CSV correspondiente para realizar la predicción")
 
@@ -49,12 +61,20 @@ st.sidebar.write("Suba el archivo CSV correspondiente para realizar la predicci�
 uploaded_file = st.sidebar.file_uploader(" ", type=['csv'])
 
 if uploaded_file is not None:
-    #Leer el archivo CSV y lo pasamos a Dataframe
-    df_de_los_datos_subidos = pd.read_csv(uploaded_file)
+    try:
+        df_de_los_datos_subidos = pd.read_csv(uploaded_file)
+        st.write('Contenido del archivo CSV en formato Dataframe:')
+        st.dataframe(df_de_los_datos_subidos)
 
-    #Mostrar el contenido del archivo CSV
-    st.write('Contenido del archivo CSV en formato Dataframe:')
-    st.dataframe(df_de_los_datos_subidos)
+        # Validar columnas
+        missing_columns = [col for col in config.FEATURES if col not in df_de_los_datos_subidos.columns]
+        if missing_columns:
+            st.error(f"Las siguientes columnas están faltando en el archivo CSV: {missing_columns}")
+        else:
+            st.write('Todas las columnas necesarias están presentes.')
+    except Exception as e:
+        st.error(f"Error al cargar el archivo CSV: {e}")
+
 #-------------------------------------------------------------------------------------------
 # Cargar el Modelo ML o Cargar el Pipeline
 pipeline_path = os.path.join(os.path.dirname(__file__), 'linear_regression.joblib')
@@ -114,6 +134,3 @@ if st.sidebar.button("Haz clic aquí para enviar el CSV al Pipeline"):
                     file_name='predicciones_moviles.csv',
                     mime='text/csv',
                 )
-            #-------------------------------------------------------------------
-#Comando para lanzar la aplicación de forma LOCAL:
-#streamlit run modelo_ml_streamlit.py
