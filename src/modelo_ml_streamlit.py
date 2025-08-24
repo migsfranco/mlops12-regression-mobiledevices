@@ -7,6 +7,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
+# Configuración de la página para evitar el warning de use_column_width
+st.set_page_config(layout="wide")
+
 #------------------------------------------------------------------------------------------------
 from feature_engine.imputation import CategoricalImputer, MeanMedianImputer, AddMissingIndicator
 from feature_engine.encoding import OrdinalEncoder, RareLabelEncoder
@@ -64,9 +67,9 @@ image_path = os.path.join(os.path.dirname(__file__), 'images/datapath-logo.png')
 # Verificar si la imagen existe
 if os.path.exists(image_path):
     image = Image.open(image_path)
-    st.image(image, use_column_width=True)
+    st.image(image, use_container_width=True)
 else:
-    st.error(f"No se encontró la imagen en la ruta: {image_path}")
+    st.warning(f"No se encontró la imagen en la ruta: {image_path}")
 
 st.sidebar.write("Suba el archivo CSV correspondiente para realizar la predicción")
 
@@ -92,7 +95,7 @@ if uploaded_file is not None:
 
 #-------------------------------------------------------------------------------------------
 # Cargar el Modelo ML o Cargar el Pipeline
-pipeline_path = os.path.join(os.path.dirname(__file__), 'input/modelo_entrenado_diamond_price_predictor.pkl')
+pipeline_path = os.path.join(os.path.dirname(__file__), 'linear_regression.joblib')
 
 # Verificar si el modelo existe
 if os.path.exists(pipeline_path):
@@ -107,9 +110,9 @@ else:
 
 if st.sidebar.button("Haz clic aquí para enviar el CSV al Pipeline"):
     if uploaded_file is None:
-        st.sidebar.write("No se cargó correctamente el archivo, súbalo de nuevo")
+        st.sidebar.error("No se cargó correctamente el archivo, súbalo de nuevo")
     elif pipeline_de_produccion is None:
-        st.sidebar.write("No se cargó correctamente el modelo")
+        st.sidebar.error("No se cargó correctamente el modelo")
     else:
         with st.spinner('Pipeline y Modelo procesando...'):
             prediccion, prediccion_sin_escalar, datos_procesados = prediccion_o_inferencia(pipeline_de_produccion, df_de_los_datos_subidos)
