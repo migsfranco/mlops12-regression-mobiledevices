@@ -1,4 +1,0 @@
-gcloud init
-gcloud artifacts repositories create repo-mlops11-streamlit-datapath --repository-format docker --project project-mlops9-ino-streamlit --location us-central1
-gcloud builds submit --config=cloudbuild.yaml --project project-mlops9-ino-streamlit
-gcloud run services replace service.yaml --region us-central1 --project project-mlops9-ino-streamlit
