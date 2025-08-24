@@ -4,9 +4,14 @@ metadata:
   name: servicio-streamlit-datapath-miguel-franco
 spec:
   template:
+    metadata:
+      name: servicio-streamlit-datapath-miguel-franco-v1  # Nombre para la revisión
     spec:
       containers:
-        - image: us-central1-docker.pkg.dev/project-mlops12-miguel-franco/repo-mlops12-streamlit-regresion/image-v2-streamlit-datapath:latest
-          env:
+        - image: us-central1-docker.pkg.dev/project-mlops12-miguel-franco/repo-mlops12-streamlit-regresion/image-v3-streamlit-datapath:latest
           ports:
             - containerPort: 4000
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "512Mi"
