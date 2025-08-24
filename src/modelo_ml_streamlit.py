@@ -58,22 +58,22 @@ st.sidebar.write("Suba el archivo CSV correspondiente para realizar la predicci�
 
 #------------------------------------------------------------------------------------------
 # Cargar el archivo CSV desde la barra lateral
-uploaded_file = st.sidebar.file_uploader(" ", type=['csv'])
+uploaded_file = st.sidebar.file_uploader("Subir archivo CSV", type=['csv'])
 
-#####if uploaded_file is not None:
-    ####try:
-        ###df_de_los_datos_subidos = pd.read_csv(uploaded_file)
-        ##st.write('Contenido del archivo CSV en formato Dataframe:')
-        #st.dataframe(df_de_los_datos_subidos)
+if uploaded_file is not None:
+    try:
+        df_de_los_datos_subidos = pd.read_csv(uploaded_file)
+        st.write('Contenido del archivo CSV en formato Dataframe:')
+        st.dataframe(df_de_los_datos_subidos)
 
         # Validar columnas
-        #missing_columns = [col for col in config.FEATURES if col not in df_de_los_datos_subidos.columns]
-        #if missing_columns:
-           # st.error(f"Las siguientes columnas están faltando en el archivo CSV: {missing_columns}")
-        #else:
-            ###st.write('Todas las columnas necesarias están presentes.')
-    ##except Exception as e:
-        #st.error(f"Error al cargar el archivo CSV: {e}")
+        missing_columns = [col for col in config.FEATURES if col not in df_de_los_datos_subidos.columns]
+        if missing_columns:
+            st.error(f"Las siguientes columnas están faltando en el archivo CSV: {missing_columns}")
+        else:
+            st.write('Todas las columnas necesarias están presentes.')
+    except Exception as e:
+        st.error(f"Error al cargar el archivo CSV: {e}")
 
 #-------------------------------------------------------------------------------------------
 # Cargar el Modelo ML o Cargar el Pipeline
@@ -110,17 +110,17 @@ if st.sidebar.button("Haz clic aquí para enviar el CSV al Pipeline"):
                 st.write(prediccion_sin_escalar)
 
                 # Graficar los precios
-                plt.figure(figsize=(10, 5))
-                plt.hist(prediccion_sin_escalar, bins=30, color='skyblue', edgecolor='black')
-                plt.title('Distribución de Precios Predichos')
-                plt.xlabel('Precio en Euros')
-                plt.ylabel('Frecuencia')
-                st.pyplot(plt)
+                fig, ax = plt.subplots(figsize=(10, 5))
+                ax.hist(prediccion_sin_escalar, bins=30, color='skyblue', edgecolor='black')
+                ax.set_title('Distribución de Precios Predichos')
+                ax.set_xlabel('Precio en Euros')
+                ax.set_ylabel('Frecuencia')
+                st.pyplot(fig)
 
                 # Proceso para descargar todo el archivo con las predicciones
                 df_resultado = df_de_los_datos_subidos.copy()
                 df_resultado['prediccion_log_precio'] = prediccion
-                df_resultado['prediccion_precio_euros'] = prediccion_sin_escalar    
+                df_resultado['prediccion_precio_euros'] = prediccion_sin_escalar
 
                 # Mostrar el Dataframe concatenado
                 st.subheader('Dataframe con las Predicciones')
@@ -128,7 +128,6 @@ if st.sidebar.button("Haz clic aquí para enviar el CSV al Pipeline"):
 
                 # Crear el archivo CSV para descargar
                 csv = df_resultado.to_csv(index=False).encode('utf-8')
-        
 
                 # Botón para descargar el CSV
                 st.download_button(
