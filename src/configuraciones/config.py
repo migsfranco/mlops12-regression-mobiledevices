@@ -121,6 +121,5 @@ FEATURES = [
     'three_g',
     'touch_screen',
     'wifi',
-    'weight',
     'battery_power'
 ]

@@ -28,7 +28,7 @@ def add_missing_columns(df, expected_columns):
 def impute_missing_values(df):
     """Imputa valores faltantes en el DataFrame."""
     for column in df.columns:
-        if df[column].dtype == 'object':
+        if pd.api.types.is_object_dtype(df[column]):
             df[column].fillna('Unknown', inplace=True)
         else:
             df[column].fillna(df[column].median(), inplace=True)
