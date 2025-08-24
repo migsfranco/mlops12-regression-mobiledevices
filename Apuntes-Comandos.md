@@ -7,7 +7,10 @@ gcloud artifacts repositories create repo-mlops12-streamlit-regresion --reposito
 ## Paso Automatización
 - git init
 - git add . 
-- git commit -m "Proyecto de automatización de despliegue en GC
+- git commit -m "first commit"
+- git branch -M main
+- git remote add origin https://github.com/migsfranco/mlops12-regression-mobiledevices.git
+- git push -u origin main
 
 
 

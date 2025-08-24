@@ -3,7 +3,7 @@ name: Deploy to Cloud Run
 env:
   SERVICE_NAME: servicio-streamlit-miguel-franco
   PROJECT_ID: project-mlops12-miguel-franco
-  DOCKER_IMAGE_URL: us-central1-docker.pkg.dev/project-mlops12-miguel-franco/repo-deploy-fastapi-cicd/image-v3-deploy-fastapi-cicd
+  DOCKER_IMAGE_URL: us-central1-docker.pkg.dev/project-mlops12-miguel-franco/repo-mlops12-streamlit-regresion/image-v1-deploy-fastapi-cicd
 
 on:
   push:
